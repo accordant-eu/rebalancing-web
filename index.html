@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rebalancing Engine — Autonomous portfolio rebalancing for advisors</title>
+  <meta name="description" content="A continuous autonomous agent that monitors portfolio drift, proposes trades, and executes — within the safety limits you define. Built for advisory firms." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ─── Nav ──────────────────────────────────────────────────────────── -->
+  <nav>
+    <div class="nav-inner">
+      <span class="wordmark">Rebalancing Engine</span>
+      <div class="nav-links">
+        <a href="#how-it-works" class="nav-link">How it works</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="https://app.rebalancing.accordant.eu" class="nav-cta">Open app →</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ─── Hero ─────────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="container">
+      <div class="status-badge">Private beta · Alpaca paper trading</div>
+      <h1>Portfolio rebalancing<br>that runs itself.</h1>
+      <p class="lead">
+        A continuous autonomous agent that monitors drift across every client
+        portfolio, proposes corrective trades when thresholds are crossed, and
+        executes — within the hard limits you define. No batches. No schedules.
+        No manual workflows.
+      </p>
+      <div class="hero-actions">
+        <a href="https://app.rebalancing.accordant.eu" class="btn-primary">Open app →</a>
+        <a href="mailto:rufus@accordant.eu?subject=Rebalancing Engine — early access" class="btn-secondary">Request early access</a>
+      </div>
+      <div class="hero-meta">
+        <span class="meta-item"><span class="meta-dot green"></span>Live on Alpaca paper trading</span>
+        <span class="meta-sep">·</span>
+        <span class="meta-item">Multi-portfolio · Multi-tenant architecture</span>
+        <span class="meta-sep">·</span>
+        <span class="meta-item">Immutable audit trail</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Problem ──────────────────────────────────────────────────────── -->
+  <section class="section-dark" id="problem">
+    <div class="container">
+      <p class="eyebrow-light">The problem</p>
+      <h2>Most rebalancing is either manual or wrong by design.</h2>
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="problem-icon">📅</div>
+          <h3>Calendar-based rebalancing</h3>
+          <p>Executes on a fixed schedule regardless of actual drift. It sells into momentum, buys into drawdowns, and generates unnecessary transaction costs — on a timer, not on signal.</p>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">👁️</div>
+          <h3>Manual threshold monitoring</h3>
+          <p>One analyst can watch a handful of portfolios. As AUM grows, coverage gaps emerge. Drift compounds unnoticed. The operational cost scales linearly with book size.</p>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">🔒</div>
+          <h3>Opaque incumbent tools</h3>
+          <p>You see a recommendation. You don't see why. Black-box systems create audit risk, complicate client reporting, and make regulatory defence difficult.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── How it works ─────────────────────────────────────────────────── -->
+  <section class="section-navy" id="how-it-works">
+    <div class="container">
+      <p class="eyebrow-light">How it works</p>
+      <h2>Configure. Monitor. Execute.</h2>
+      <p class="section-intro-light">
+        The engine separates the mathematics of rebalancing from the mechanics of execution.
+        A pure, stateless calculation core. A live autonomous agent wrapped around it.
+      </p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">01</div>
+          <h3>Configure policies</h3>
+          <p>Define target allocations, drift thresholds, and circuit breaker limits as configuration objects — not code. Update strategy for any portfolio without redeployment.</p>
+          <div class="code-pill">policy.strategyType · thresholds · targetAllocation</div>
+        </div>
+        <div class="step-divider">→</div>
+        <div class="step">
+          <div class="step-number">02</div>
+          <h3>Monitor continuously</h3>
+          <p>The agent runs in a live evaluation loop, pulling real-time price and position state from the broker API on every tick. Every portfolio, all the time.</p>
+          <div class="code-pill">LiveStateManager · cooldown · debounce</div>
+        </div>
+        <div class="step-divider">→</div>
+        <div class="step">
+          <div class="step-number">03</div>
+          <h3>Execute safely</h3>
+          <p>When drift crosses a threshold, the engine calculates corrective trades. Circuit breakers enforce hard limits on trade count and gross notional before anything touches the broker.</p>
+          <div class="code-pill">CircuitBreaker · AlpacaAdapter · audit-trail.jsonl</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Architecture ──────────────────────────────────────────────────── -->
+  <section class="section-dark" id="architecture">
+    <div class="container">
+      <div class="arch-block">
+        <div class="arch-text">
+          <p class="eyebrow-light">Architecture</p>
+          <h2>Engine and orchestrator.<br>Strictly separated.</h2>
+          <p>
+            The calculation core is a pure function. It accepts inputs — prices, positions,
+            cash, policy — and returns outputs: drift measurements and trade proposals.
+            It makes no network calls, reads no clocks, mutates no state.
+          </p>
+          <p>
+            The orchestrator is the live agent. It connects to broker APIs, manages
+            rate-limiting and cooldown timers, executes orders, and handles post-trade
+            reconciliation. Every side effect lives here, not in the engine.
+          </p>
+          <p>
+            This separation means the engine is independently testable and auditable.
+            The same calculation logic that runs live can be run offline against
+            historical data. The output is deterministic. You can explain every trade.
+          </p>
+        </div>
+        <div class="arch-diagram">
+          <div class="arch-box agent">
+            <div class="arch-label">Orchestrator (Live Agent)</div>
+            <div class="arch-items">
+              <span>Broker API connection</span>
+              <span>Price feed ingestion</span>
+              <span>Cooldown / rate limiting</span>
+              <span>Order submission</span>
+              <span>Reconciliation pause</span>
+            </div>
+          </div>
+          <div class="arch-arrow">↓ prices · positions · policy</div>
+          <div class="arch-box engine">
+            <div class="arch-label">Engine (Pure Function)</div>
+            <div class="arch-items">
+              <span>Portfolio valuation</span>
+              <span>Drift calculation</span>
+              <span>Trade proposal</span>
+              <span>Audit record generation</span>
+            </div>
+          </div>
+          <div class="arch-arrow">↑ trade proposals · audit records</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Features ────────────────────────────────────────────────────── -->
+  <section class="section-navy" id="features">
+    <div class="container">
+      <p class="eyebrow-light">Capabilities</p>
+      <h2>What's in the engine.</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Three rebalancing strategies</h3>
+          <p>Threshold (drift-triggered), calendar due-date, and manual forced-rebalance. Selectable per portfolio via policy configuration.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>Two execution modes</h3>
+          <p>Full-reset targeting and boundary-band targeting. Full-reset returns to exact target weights. Boundary-band stops at the drift threshold to minimise unnecessary trades.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h3>Circuit breaker limits</h3>
+          <p>Hard stops on maximum trade count and gross notional value per execution cycle. Configurable per tenant. Global override for market stress events.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <h3>Immutable audit trail</h3>
+          <p>Every calculation emits a structured JSON record: inputs, outputs, drift measurements, and the exact rationale for each trade proposal. Immutable by design.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💰</div>
+          <h3>Cash flow awareness</h3>
+          <p>Settled deposits and withdrawals, pending cash flows, and scheduled recurring contributions are all factored into trade proposals. Incoming cash is used to reduce drift before trades.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🏢</div>
+          <h3>Multi-tenant architecture</h3>
+          <p>Each advisory firm is an isolated tenant. Portfolio state, broker credentials, and circuit breaker limits are scoped per tenant. Provisioned by the platform operator.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚙️</div>
+          <h3>Policy-as-configuration</h3>
+          <p>Target allocations, threshold bands, and strategy types are configuration objects — not hardcoded logic. Update any portfolio's strategy without touching the engine.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3>Reconciliation pause</h3>
+          <p>The agent pauses evaluation for a portfolio while broker orders are pending. Prevents double-execution on in-flight trades. Resumes automatically on confirmation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Status ───────────────────────────────────────────────────────── -->
+  <section class="section-cta">
+    <div class="container">
+      <p class="eyebrow-light">Status</p>
+      <h2>Private beta. Built in the open.</h2>
+      <p class="cta-body">
+        The engine is live on Alpaca paper trading. Multi-tenant B2B broker routing
+        is in development. The full source — including 180+ architecture decision records
+        documenting every design choice — is on GitHub.
+      </p>
+      <div class="cta-actions">
+        <a href="https://app.rebalancing.accordant.eu" class="btn-primary">Open app →</a>
+        <a href="https://github.com/accordant-eu/rebalancing-engine" class="btn-ghost" target="_blank">View source ↗</a>
+        <a href="mailto:rufus@accordant.eu?subject=Rebalancing Engine — early access" class="btn-ghost">Request access</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ───────────────────────────────────────────────────────── -->
+  <footer>
+    <div class="container footer-inner">
+      <span class="footer-wordmark">Rebalancing Engine</span>
+      <span class="footer-copy">© 2026 Johan Hellman · <a href="https://accordant.eu">accordant.eu</a></span>
+    </div>
+  </footer>
+
+</body>
+</html>
