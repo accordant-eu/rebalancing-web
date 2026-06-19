@@ -242,6 +242,16 @@
           <h3>Reconciliation pause</h3>
           <p>The agent pauses evaluation for a portfolio while broker orders are pending. Prevents double-execution on in-flight trades. Resumes automatically on confirmation.</p>
         </div>
+        <div class="feature-card">
+          <div class="feature-icon">📐</div>
+          <h3>Mandate archetypes</h3>
+          <p>Portfolios follow typed mandate archetypes — StaticWeights, EfficientFrontier, MinimumVariance — each bound to a specific quality evaluation function. The engine never trades if estimated transaction costs exceed the utility of the drift reduction.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📎</div>
+          <h3>Model mandate system</h3>
+          <p>Advisors define named model mandates with target allocations and rebalancing policy. Client portfolios subscribe as discretionary (cascade-on-update) or bespoke (independent). Mandate changes propagate automatically to all subscribed portfolios.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -252,9 +262,9 @@
       <p class="eyebrow-light">Status</p>
       <h2>Private beta. Built in the open.</h2>
       <p class="cta-body">
-        The engine is live on Alpaca paper trading. Multi-tenant B2B broker routing
-        is in development. The full source — including 180+ architecture decision records
-        documenting every design choice — is on GitHub.
+        The engine is live on Alpaca paper trading. Multi-tenant B2B architecture,
+        broker routing, and API key infrastructure are live. The full source — including
+        51 architecture decision records documenting every design choice — is on GitHub.
       </p>
       <div class="cta-actions">
         <a href="https://app.rebalancing.accordant.eu" class="btn-primary">Open app →</a>
